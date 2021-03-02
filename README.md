@@ -30,3 +30,5 @@ I used various online references because of my lack of expertise in the statisti
 *https://www.youtube.com/watch?v=qMTuMa86NzU*
 
 *https://www.python-course.eu/expectation_maximization_and_gaussian_mixture_models.php*
+
+To run the program simply download the file and run main.py
