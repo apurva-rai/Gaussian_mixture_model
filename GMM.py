@@ -1,9 +1,6 @@
 import numpy as np
 from scipy.stats import multivariate_normal
-from scipy.stats import mode
-from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_iris
 import pandas
 
 class gmm:
