@@ -70,3 +70,25 @@ class gmm:
         self.confidence = prob * self.pi / np.sum(prob * self.pi, axis = 1, keepdims = True)
 
         return np.argmax(self.confidence, axis = 1)
+
+    #Plots the data along with the contour lines. Does not account for more than 6 clusters as the data sets I picked do not need that many.
+    def draw(self, trainee, u, sig, xAxis="X-axis", yAxis="Y-axis", title="Gaussian Mixture Model countor map"):
+        x, y = np.meshgrid(np.sort(trainee[:,0]), np.sort([trainee[:,1]]))
+        xy = np.array([x.flatten(), y.flatten()]).T
+        figure = plt.figure(figsize=(10,10))
+
+        x0 = fig.add_subplot(111)
+        x0.scatter(trainee[:,0], trainee[:,1])
+        x0.set_title(title)
+
+        x0.set_xlabel(xAxis)
+        x0.set_ylabel(yAxis)
+
+        colors = ['red','black','yellow','green','magenta','cyan']
+
+        #Does not account for more than 6 clusters. (One could implement a simple color randomizer for that)
+        for i in range(self.clusters):
+            x0.contour(np.sort(trainee[:,0]), np.sort(trainee[:,1]), multivariate_normal.pdf(xy, mean = u[i], cov = sig[i]).reshape(len(trainee), len(trainee)), colors='black')
+            x0.scatter(u[i][0], u[i][1], c = 'grey', zorder=10, s=100)
+
+        plt.show()
