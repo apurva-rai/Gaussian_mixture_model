@@ -22,6 +22,9 @@ Clusters: *2*
 Iterations: *50*
 
 I used various online references because of my lack of expertise in the statistics behind GMM and Python graph plotting. The following are the main ones:
+
 *http://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/*
+
 *https://www.youtube.com/watch?v=qMTuMa86NzU*
+
 *https://www.python-course.eu/expectation_maximization_and_gaussian_mixture_models.php*
