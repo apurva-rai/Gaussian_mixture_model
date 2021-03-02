@@ -21,6 +21,8 @@ Clusters: *2*
 
 Iterations: *50*
 
+
+Numpy, scipy and pandas libraries were used for efficient i/o and processing. If you do not have these dependencies installed then you need to install them using pip.
 I used various online references because of my lack of expertise in the statistics behind GMM and Python graph plotting. The following are the main ones:
 
 *http://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/*
