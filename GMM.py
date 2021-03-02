@@ -59,3 +59,14 @@ class gmm:
            self.sig[x]] = np.cov(np.transpose(trainee).astype(float), aweights = (confidence / totalConfidence).flatten(), bias = True)
 
        return self
+
+    #Calculates the prediction probailitie and returns the max along the 1st axis
+    def predClass(self, trainee):
+        prob = np.zeros((trainee.shape[0], self.clusters))
+
+        for x in range(self.clusters):
+            prob[:,c] = multivariate_normal.pdf(trainee, self.u[x], self.sig[x])
+
+        self.confidence = prob * self.pi / np.sum(prob * self.pi, axis = 1, keepdims = True)
+
+        return np.argmax(self.confidence, axis = 1)
