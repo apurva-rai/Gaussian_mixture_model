@@ -11,7 +11,7 @@ class gmm:
         self.randSeed = randSeed
         self.clusters = clusters
         self.iter = iter
-        self.u None
+        self.u = None
         self.sig = None
         self.pi = None
         self.confidence = None
@@ -29,7 +29,7 @@ class gmm:
         self.u = [trainee[i] for i in randRow]
         self.sig = [np.cov(np.transpose(trainee).astype(float)) for _ in range(self.clusters)]
 
-        for _ in range(clusters):
+        for _ in range(self.iter):
             self.expected(trainee)
             self.maximizer(trainee)
 
@@ -41,7 +41,7 @@ class gmm:
        prob = np.zeros((trainee.shape[0], self.clusters))
 
        for x in range(self.clusters):
-           prob[:,c] = multivariate_normal.pdf(trainee,self.u[x],self.sig[x])
+           prob[:,x] = multivariate_normal.pdf(trainee,self.u[x],self.sig[x])
 
        self.confidence = prob * self.pi / np.sum(prob * self.pi, axis = 1, keepdims = True)
        self.pi = self.confidence.mean(axis = 0)
@@ -56,7 +56,7 @@ class gmm:
            confidence = self.confidence[:,[x]]
            totalConfidence = self.confidence[:,[x]].sum()
            self.u[x] = (trainee * confidence).sum(axis=0) / totalConfidence
-           self.sig[x]] = np.cov(np.transpose(trainee).astype(float), aweights = (confidence / totalConfidence).flatten(), bias = True)
+           self.sig[x] = np.cov(np.transpose(trainee).astype(float), aweights = (confidence / totalConfidence).flatten(), bias = True)
 
        return self
 
@@ -72,32 +72,34 @@ class gmm:
         return np.argmax(self.confidence, axis = 1)
 
     #Plots the data along with the contour lines. Does not account for more than 6 clusters as the data sets I picked do not need that many.
-    def draw(self, trainee, u, sig, xAxis="X-axis", yAxis="Y-axis", title="Gaussian Mixture Model countor map"):
+    def draw(self, trainee, u, sig, xAxis="X-axis", yAxis="Y-axis", title="Gaussian Mixture Model contour map"):
         x, y = np.meshgrid(np.sort(trainee[:,0]), np.sort([trainee[:,1]]))
         xy = np.array([x.flatten(), y.flatten()]).T
         figure = plt.figure(figsize=(10,10))
 
-        x0 = fig.add_subplot(111)
+        x0 = figure.add_subplot(111)
         x0.scatter(trainee[:,0], trainee[:,1])
         x0.set_title(title)
 
         x0.set_xlabel(xAxis)
         x0.set_ylabel(yAxis)
 
-        colors = ['red','black','yellow','green','magenta','cyan']
+        colors = ['red', 'magenta', 'yellow', 'green', 'cyan', 'black']
 
         #Does not account for more than 6 clusters. (One could implement a simple color randomizer for that)
         for i in range(self.clusters):
-            x0.contour(np.sort(trainee[:,0]), np.sort(trainee[:,1]), multivariate_normal.pdf(xy, mean = u[i], cov = sig[i]).reshape(len(trainee), len(trainee)), colors='black')
+            x0.contour(np.sort(trainee[:,0]), np.sort(trainee[:,1]), multivariate_normal.pdf(xy, mean = u[i], cov = sig[i]).reshape(len(trainee), len(trainee)), colors=colors[i], alpha=0.33)
             x0.scatter(u[i][0], u[i][1], c = 'grey', zorder=10, s=100)
 
         plt.show()
 
+    #Need static method because 1 position argument will be passed when 2 is required without
+    @staticmethod
     def findInflections(trainee):
         inflections = []
 
         for x in range(len(trainee[0])):
-            colVals = [rows[i] for rows in trainee]
+            colVals = [rows[x] for rows in trainee]
             minVal = min(colVals)
             maxVal = max(colVals)
 
@@ -105,9 +107,11 @@ class gmm:
 
         return inflections
 
+    #Used for normalization of the multi-variate data set
+    @staticmethod
     def normalizeSet(trainee):
 
-        if isinstance(trainee. pandas.DataFrame):
+        if isinstance(trainee, pandas.DataFrame):
             trainee = trainee.values
 
         inflections = gmm.findInflections(trainee)
@@ -116,4 +120,4 @@ class gmm:
             for col in range(len(row)):
                 row[col] = (row[col] - inflections[col][0]) / (inflections[col][1] - inflections[col][0])
 
-        return trainee            
+        return trainee
