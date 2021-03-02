@@ -34,4 +34,28 @@ class gmm:
             self.maximizer(trainee)
 
         return self
-   
+
+    #Given the covariance matrix and centroid the probability for each class class can be calculated and normalized.
+    #The conditional probability is the multivariate normal distribution
+    def expected(self, trainee):
+       prob = np.zeros((trainee.shape[0], self.clusters))
+
+       for x in range(self.clusters):
+           prob[:,c] = multivariate_normal.pdf(trainee,self.u[x],self.sig[x])
+
+       self.confidence = prob * self.pi / np.sum(prob * self.pi, axis = 1, keepdims = True)
+       self.pi = self.confidence.mean(axis = 0)
+
+       return self
+
+    #The weights of a given matrix with trainee observations which come from a multivariate distribution are used.
+    #There is no learning rate or gradients as the following function is already maximal.
+    def maximizer(self, trainee):
+
+       for x in range (self.clusters):
+           confidence = self.confidence[:,[x]]
+           totalConfidence = self.confidence[:,[x]].sum()
+           self.u[x] = (trainee * confidence).sum(axis=0) / totalConfidence
+           self.sig[x]] = np.cov(np.transpose(trainee).astype(float), aweights = (confidence / totalConfidence).flatten(), bias = True)
+
+       return self
