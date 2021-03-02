@@ -2,36 +2,20 @@ if __name__ == '__main__':
     from pandas import read_csv
     import gmm
 
-iris = load_iris()
-X = iris.data
-np.random.seed(42)
-gmm = GMM(k=3, max_iter=10)
-gmm.fit(X)
+    #Load datasets using pandas interface
+    data1 = read_csv("")
+    data2 = read_csv("")
 
-def jitter(x):
-    return x + np.random.uniform(low=-0.05, high=0.05, size=x.shape)
+    data1.dropna(axis="columns", how="any", inplace = True)
+    data1.dropna(axis="columns", how="any", inplace = True)
 
-def plot_axis_pairs(X, axis_pairs, clusters, classes):
-    n_rows = len(axis_pairs) // 2
-    n_cols = 2
-    plt.figure(figsize=(16, 10))
-    for index, (x_axis, y_axis) in enumerate(axis_pairs):
-        plt.subplot(n_rows, n_cols, index+1)
-        plt.title('GMM Clusters')
-        plt.xlabel(iris.feature_names[x_axis])
-        plt.ylabel(iris.feature_names[y_axis])
-        plt.scatter(
-            jitter(X[:, x_axis]),
-            jitter(X[:, y_axis]),
-            #c=clusters,
-            cmap=plt.cm.get_cmap('brg'),
-            marker='x')
-    plt.tight_layout()
+    #Data set 1 clustered
+    trainee1 = data1[['','']]
 
-plot_axis_pairs(
-    X=X,
-    axis_pairs=[
-        (0,1), (2,3),
-        (0,2), (1,3) ],
-    clusters=permuted_prediction,
-    classes=iris.target)
+    model1 = gmm.gmm(clusters=2,iter=25,randSeed=42)
+    normalized1 = model.normalizeSet(trainee)
+
+    model1.trainModel(normalized1)
+    model1.draw(normalized1, model1.u, model.sig, xAxis = trainee.columns.values[0], yAxis = trainee.columns.values[1])
+
+    #Data set 2 clustered
