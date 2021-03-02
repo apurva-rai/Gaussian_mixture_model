@@ -92,3 +92,28 @@ class gmm:
             x0.scatter(u[i][0], u[i][1], c = 'grey', zorder=10, s=100)
 
         plt.show()
+
+    def findInflections(trainee):
+        inflections = []
+
+        for x in range(len(trainee[0])):
+            colVals = [rows[i] for rows in trainee]
+            minVal = min(colVals)
+            maxVal = max(colVals)
+
+            inflections.append([minVal, maxVal])
+
+        return inflections
+
+    def normalizeSet(trainee):
+
+        if isinstance(trainee. pandas.DataFrame):
+            trainee = trainee.values
+
+        inflections = gmm.findInflections(trainee)
+
+        for row in trainee:
+            for col in range(len(row)):
+                row[col] = (row[col] - inflections[col][0]) / (inflections[col][1] - inflections[col][0])
+
+        return trainee            
